@@ -1,0 +1,5 @@
+{
+  "name": "TripFlow",
+  "description": "Application de bout en bout de gestion des business trips (demandes, validations, pilotage budgétaire).",
+  "requestFramePermissions": []
+}
