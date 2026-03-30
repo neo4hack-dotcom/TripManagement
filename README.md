@@ -35,6 +35,26 @@ Le backend est responsable de:
 
 Le frontend consomme l'API du backend et ne gere plus la persistance lui-meme.
 
+## Compatibilite Windows
+
+Le projet est maintenant prepare pour Windows, macOS et Linux.
+
+Les scripts npm suivants sont multiplateformes:
+
+- `npm run dev`
+- `npm run dev:api`
+- `npm run clean`
+- `npm run lint`
+- `npm run check:backend`
+
+Le script `npm run dev:api` detecte automatiquement un interpreteur Python compatible, en essayant notamment:
+
+- `PYTHON_BIN` si defini
+- un environnement virtuel local `.venv`
+- `py -3` sur Windows
+- `python`
+- `python3`
+
 ## Stockage des donnees
 
 La base applicative est stockee dans [DB.json](/Users/mathieumasson/Documents/TripManagement/DB.json).
@@ -212,7 +232,8 @@ Les comptes suivants sont fournis par defaut:
 - [src/components/RequestWorkspace.tsx](/Users/mathieumasson/Documents/TripManagement/src/components/RequestWorkspace.tsx): entree de creation des demandes
 - [src/components/TravelAssistantChat.tsx](/Users/mathieumasson/Documents/TripManagement/src/components/TravelAssistantChat.tsx): assistant guide
 - [src/lib/travel.ts](/Users/mathieumasson/Documents/TripManagement/src/lib/travel.ts): logique metier partagee
-- [backend/app.py](/Users/mathieumasson/Documents/TripManagement/backend/app.py): API FastAPI
+- [server.py](/Users/mathieumasson/Documents/TripManagement/server.py): point d'entree backend
+- [backend/app.py](/Users/mathieumasson/Documents/TripManagement/backend/app.py): logique FastAPI
 - [backend/requirements.txt](/Users/mathieumasson/Documents/TripManagement/backend/requirements.txt): dependances Python
 - [DB.json](/Users/mathieumasson/Documents/TripManagement/DB.json): base de donnees JSON
 
@@ -236,6 +257,12 @@ npm install
 python3 -m pip install -r backend/requirements.txt
 ```
 
+Sous Windows, vous pouvez aussi utiliser:
+
+```powershell
+py -3 -m pip install -r backend/requirements.txt
+```
+
 ## Lancement en local
 
 ### 1. Lancer l'API FastAPI
@@ -245,6 +272,8 @@ npm run dev:api
 ```
 
 L'API ecoute sur `http://127.0.0.1:8000`.
+Ce script est compatible Windows et choisit automatiquement le bon interpreteur Python.
+Vous pouvez aussi lancer directement le backend avec `python server.py`.
 
 ### 2. Lancer le frontend
 
@@ -268,7 +297,7 @@ npm run build
 ### Backend
 
 ```bash
-python3 -m py_compile backend/app.py
+npm run check:backend
 ```
 
 ## Configuration
@@ -279,6 +308,8 @@ Le fichier [.env.example](/Users/mathieumasson/Documents/TripManagement/.env.exa
 - `VITE_API_BASE_URL`
 
 En local, `VITE_API_BASE_URL` peut rester vide pour utiliser le proxy Vite.
+
+Si Python n'est pas detecte automatiquement sur votre machine, vous pouvez forcer son chemin via la variable d'environnement `PYTHON_BIN`.
 
 ## Etat actuel
 
