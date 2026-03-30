@@ -5,11 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite --port=3000 --host=127.0.0.1",
-    "dev:api": "python3 -m uvicorn backend.app:app --reload --host 127.0.0.1 --port 8000",
+    "dev:api": "node scripts/run-api.mjs",
     "build": "vite build",
     "preview": "vite preview",
-    "clean": "rm -rf dist",
-    "lint": "tsc --noEmit"
+    "clean": "node scripts/clean.mjs",
+    "lint": "tsc --noEmit",
+    "check:backend": "node scripts/check-backend.mjs"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.15",
