@@ -3,16 +3,16 @@ import { useAppContext } from '../context/AppContext';
 import { Plane, Lock, Mail, AlertCircle } from 'lucide-react';
 
 export default function LoginPage() {
-  const { login } = useAppContext();
+  const { login, clearErrorMessage } = useAppContext();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const success = login(email, password);
+    const success = await login(email, password);
     if (!success) {
-      setError('Identifiants incorrects.');
+      setError('Identifiants incorrects ou serveur indisponible.');
     }
   };
 
@@ -45,7 +45,11 @@ export default function LoginPage() {
                 className="w-full pl-10 pr-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
                 placeholder="Identifiant"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  setError('');
+                  clearErrorMessage();
+                }}
               />
             </div>
           </div>
@@ -60,7 +64,11 @@ export default function LoginPage() {
                 className="w-full pl-10 pr-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
                 placeholder="••••••••"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setError('');
+                  clearErrorMessage();
+                }}
               />
             </div>
           </div>

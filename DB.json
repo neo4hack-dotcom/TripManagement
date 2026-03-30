@@ -1,0 +1,211 @@
+{
+  "users": [
+    {
+      "id": "u1",
+      "name": "Alice Employee",
+      "role": "employee",
+      "managerId": "m1",
+      "department": "Sales",
+      "costCenterId": "cc1",
+      "email": "alice@company.com",
+      "password": "password123",
+      "isAdmin": false
+    },
+    {
+      "id": "m1",
+      "name": "Bob Manager",
+      "role": "manager",
+      "managerId": "d1",
+      "department": "Sales",
+      "costCenterId": "cc1",
+      "email": "bob@company.com",
+      "password": "password123",
+      "isAdmin": false
+    },
+    {
+      "id": "d1",
+      "name": "Charlie Director",
+      "role": "director",
+      "managerId": null,
+      "department": "Sales",
+      "costCenterId": "cc1",
+      "email": "charlie@company.com",
+      "password": "password123",
+      "isAdmin": false
+    },
+    {
+      "id": "f1",
+      "name": "Diana Finance",
+      "role": "finance",
+      "managerId": null,
+      "department": "Finance",
+      "costCenterId": "cc2",
+      "email": "diana@company.com",
+      "password": "password123",
+      "isAdmin": false
+    },
+    {
+      "id": "admin",
+      "name": "Admin System",
+      "role": "finance",
+      "managerId": null,
+      "department": "IT",
+      "costCenterId": "cc2",
+      "email": "MM2026",
+      "password": "MM@2026",
+      "isAdmin": true
+    }
+  ],
+  "trips": [
+    {
+      "id": "t1",
+      "userId": "u1",
+      "destination": "London",
+      "continent": "Europe",
+      "startDate": "2026-04-10",
+      "endDate": "2026-04-12",
+      "reason": "Client Meeting",
+      "transportMode": "plane",
+      "accommodationType": "hotel",
+      "estimatedCosts": {
+        "transport": 300.0,
+        "accommodation": 400.0,
+        "meals": 150.0
+      },
+      "totalEstimatedCost": 850.0,
+      "status": "pending_n1",
+      "createdAt": "2026-03-25",
+      "costCenterId": "cc1",
+      "policyAlerts": [
+        "La nuitee a London depasse le forfait de 180 EUR (estime: 200 EUR/nuit)"
+      ]
+    },
+    {
+      "id": "t2",
+      "userId": "u1",
+      "destination": "New York",
+      "continent": "North America",
+      "startDate": "2026-05-01",
+      "endDate": "2026-05-05",
+      "reason": "Conference",
+      "transportMode": "plane",
+      "accommodationType": "hotel",
+      "estimatedCosts": {
+        "transport": 1200.0,
+        "accommodation": 1000.0,
+        "meals": 300.0
+      },
+      "totalEstimatedCost": 2500.0,
+      "status": "pending_n2",
+      "createdAt": "2026-03-20",
+      "costCenterId": "cc1",
+      "policyAlerts": []
+    },
+    {
+      "id": "t3",
+      "userId": "u1",
+      "destination": "Paris",
+      "continent": "Europe",
+      "startDate": "2026-02-10",
+      "endDate": "2026-02-12",
+      "reason": "Internal Training",
+      "transportMode": "train",
+      "accommodationType": "hotel",
+      "estimatedCosts": {
+        "transport": 100.0,
+        "accommodation": 200.0,
+        "meals": 100.0
+      },
+      "totalEstimatedCost": 400.0,
+      "status": "completed",
+      "createdAt": "2026-01-15",
+      "costCenterId": "cc1",
+      "policyAlerts": []
+    }
+  ],
+  "costCenters": [
+    {
+      "id": "cc1",
+      "name": "Sales Dept",
+      "initialBudget": 50000.0,
+      "engagedBudget": 5000.0,
+      "actualBudget": 15000.0
+    },
+    {
+      "id": "cc2",
+      "name": "Finance Dept",
+      "initialBudget": 20000.0,
+      "engagedBudget": 1000.0,
+      "actualBudget": 5000.0
+    }
+  ],
+  "policy": {
+    "maxHotelPerNight": {
+      "London": 180.0,
+      "Paris": 150.0,
+      "New York": 250.0,
+      "default": 120.0
+    },
+    "maxMealPerDay": 60.0,
+    "budgetAlertThreshold": 80.0
+  },
+  "workflowConfig": {
+    "level2AmountThreshold": 2000.0,
+    "level3AmountThreshold": 5000.0,
+    "requireLevel2ForNonEurope": true,
+    "level3Continents": [
+      "Asia",
+      "Oceania"
+    ]
+  },
+  "llmConfig": {
+    "baseUrl": "http://127.0.0.1:1234/v1",
+    "apiKey": "",
+    "selectedModel": "",
+    "systemPrompt": "You are a local travel assistant helping complete business trip requests."
+  },
+  "requestProfiles": [
+    {
+      "id": "rp-sales-europe",
+      "name": "Deplacement commercial Europe",
+      "description": "Profil standard pour les rendez-vous clients en Europe.",
+      "department": "Sales",
+      "costCenterId": "cc1",
+      "defaultContinent": "Europe",
+      "defaultTransportMode": "plane",
+      "defaultAccommodationType": "hotel",
+      "maxBudget": 1800.0,
+      "notes": "Verifier la reservation au moins 14 jours avant le depart."
+    }
+  ],
+  "approvalProfiles": [
+    {
+      "id": "ap-n1-sales",
+      "level": "n1",
+      "name": "Validation N+1 Sales",
+      "description": "Controle manager pour les deplacements commerciaux.",
+      "department": "Sales",
+      "maxApprovalAmount": 2000.0,
+      "allowedContinents": [
+        "Europe",
+        "North America"
+      ],
+      "checklist": "Verifier l'objectif, la priorite business et la coherence budgetaire."
+    },
+    {
+      "id": "ap-n2-direction",
+      "level": "n2",
+      "name": "Validation N+2 Direction",
+      "description": "Arbitrage direction pour les voyages sensibles ou engages.",
+      "department": "Sales",
+      "maxApprovalAmount": 5000.0,
+      "allowedContinents": [
+        "Europe",
+        "North America",
+        "Asia",
+        "Oceania"
+      ],
+      "checklist": "Confirmer le ROI, les alternatives possibles et le respect du budget annuel."
+    }
+  ]
+}

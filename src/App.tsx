@@ -1,15 +1,26 @@
-import React, { useState } from 'react';
-import { AppProvider, useAppContext } from './context/AppContext';
-import RequestForm from './components/RequestForm';
+import React, {useState} from 'react';
+import {AppProvider, useAppContext} from './context/AppContext';
+import RequestWorkspace from './components/RequestWorkspace';
 import Dashboard from './components/Dashboard';
 import BudgetPilot from './components/BudgetPilot';
 import AdminPanel from './components/AdminPanel';
 import LoginPage from './components/LoginPage';
-import { Plane, LayoutDashboard, PieChart, LogOut, User as UserIcon, Settings, Shield } from 'lucide-react';
+import {LayoutDashboard, LogOut, PieChart, Plane, Shield} from 'lucide-react';
 
 const MainLayout = () => {
-  const { currentUser, logout } = useAppContext();
+  const {currentUser, logout, isBootstrapping, errorMessage, clearErrorMessage} = useAppContext();
   const [activeTab, setActiveTab] = useState<'request' | 'dashboard' | 'budget' | 'admin'>('request');
+
+  if (isBootstrapping) {
+    return (
+      <div className="min-h-screen bg-slate-950 text-white flex items-center justify-center p-6">
+        <div className="text-center">
+          <p className="text-sm uppercase tracking-[0.3em] text-blue-300 mb-3">TripFlow</p>
+          <h1 className="text-2xl font-bold">Chargement de l'application...</h1>
+        </div>
+      </div>
+    );
+  }
 
   if (!currentUser) {
     return <LoginPage />;
@@ -17,7 +28,6 @@ const MainLayout = () => {
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col md:flex-row">
-      {/* Sidebar */}
       <aside className="w-full md:w-64 bg-white border-r border-slate-200 flex flex-col">
         <div className="p-6 border-b border-slate-200">
           <h1 className="text-xl font-bold text-slate-800 flex items-center gap-2">
@@ -25,7 +35,7 @@ const MainLayout = () => {
             TripFlow
           </h1>
         </div>
-        
+
         <nav className="flex-1 p-4 space-y-2">
           <button
             onClick={() => setActiveTab('request')}
@@ -34,17 +44,19 @@ const MainLayout = () => {
             }`}
           >
             <Plane size={18} />
-            Nouvelle Demande
+            Nouvelle demande
           </button>
-          
+
           <button
             onClick={() => setActiveTab('dashboard')}
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
-              activeTab === 'dashboard' ? 'bg-blue-50 text-blue-700' : 'text-slate-600 hover:bg-slate-100'
+              activeTab === 'dashboard'
+                ? 'bg-blue-50 text-blue-700'
+                : 'text-slate-600 hover:bg-slate-100'
             }`}
           >
             <LayoutDashboard size={18} />
-            Tableau de Bord
+            Tableau de bord
           </button>
 
           {(currentUser.role === 'finance' || currentUser.role === 'director') && (
@@ -55,11 +67,11 @@ const MainLayout = () => {
               }`}
             >
               <PieChart size={18} />
-              Pilotage Budget
+              Pilotage budget
             </button>
           )}
 
-          {currentUser.email === 'MM2026' && (
+          {currentUser.isAdmin && (
             <button
               onClick={() => setActiveTab('admin')}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
@@ -82,20 +94,27 @@ const MainLayout = () => {
               <p className="text-xs text-slate-500 truncate">{currentUser.role}</p>
             </div>
           </div>
-          <button 
+          <button
             onClick={logout}
             className="w-full flex items-center gap-2 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 rounded-lg transition-colors"
           >
             <LogOut size={16} />
-            Déconnexion
+            Deconnexion
           </button>
         </div>
       </aside>
 
-      {/* Main Content */}
       <main className="flex-1 overflow-y-auto p-6 md:p-10">
-        <div className="max-w-6xl mx-auto">
-          {activeTab === 'request' && <RequestForm />}
+        <div className="max-w-7xl mx-auto">
+          {errorMessage && (
+            <div className="mb-6 bg-red-50 border border-red-200 text-red-700 rounded-xl p-4 flex items-center justify-between gap-4">
+              <span>{errorMessage}</span>
+              <button onClick={clearErrorMessage} className="text-sm font-medium">
+                Fermer
+              </button>
+            </div>
+          )}
+          {activeTab === 'request' && <RequestWorkspace />}
           {activeTab === 'dashboard' && <Dashboard />}
           {activeTab === 'budget' && <BudgetPilot />}
           {activeTab === 'admin' && <AdminPanel />}
